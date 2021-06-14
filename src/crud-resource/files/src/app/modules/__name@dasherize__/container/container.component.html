@@ -1,0 +1,36 @@
+<div style="background: #ECECEC;padding:30px;">
+  <nz-card style="width:100%;" [nzBordered]="false" nzTitle="<%= classify(name) %>">
+    <div style="display: flex;">
+      <<%= dasherize(name) %>-filter></<%= dasherize(name) %>-filter>
+      <<%= dasherize(name) %>-dynamic-form [questions]="questions$ | async"></<%= dasherize(name) %>-dynamic-form>
+      <div style="margin: 20px;">
+        <div style="margin: 20px;">
+          <button nz-button nzType="primary" (click)="showModal()">
+            <i nz-icon nzType="plus" nzTheme="outline"></i>
+            Add</button>
+        </div>
+      </div>
+    </div>
+    <<%= dasherize(name) %>-list [listOfData]="tableData"></<%= dasherize(name) %>-list>
+    <!-- <p>Card content</p>
+    <p>Card content</p>
+    <p>Card content</p> -->
+  </nz-card>
+</div>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Add" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+  [nzOkLoading]="isOkLoading">
+  <div *nzModalContent>
+    <form nz-form [formGroup]="validateForm" class="login-form">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your username!">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="name" placeholder="name" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</nz-modal>
+<!-- <ng-template #extraTemplate>
+  <a>More</a>
+</ng-template> -->
