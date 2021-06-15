@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { QuestionBase } from '../../../shared/model/question-base';
@@ -11,26 +11,32 @@ import { QuestionControlService } from '../../../shared/service/question-control
 })
 export class <%= classify(name) %>DynamicFormComponent implements OnInit {
 
-  @Input() questions: QuestionBase<string>[] | null = [];
+  @Input() questions: QuestionBase < string > [] | null =[];
   form!: FormGroup;
-  payLoad = '';
+  @Input() data;
+
+  @Output() closeForm = new EventEmitter();
+  @Output() saveForm = new EventEmitter();
 
   constructor(private qcs: QuestionControlService) { }
 
   ngOnInit() {
-    this.form = this.qcs.toFormGroup(this.questions as QuestionBase<string>[]);
+    this.form = this.qcs.toFormGroup(this.questions as QuestionBase<string>[],this.data);
   }
 
   onSubmit() {
 
-    console.log(this.form.value)
-    this.payLoad = JSON.stringify(this.form.getRawValue());
+    const <%= dasherize(name) %> = { ...this.form.value }
+    this.data ? <%= dasherize(name) %> ['id'] = this.data.id : ''
+
+    if (this.form.valid) {
+      this.saveForm.emit(<%= dasherize(name) %>)
+      this.closeForm.emit();
+    } 
+  }
+  onClose() {
+    this.closeForm.emit();
   }
 }
 
 
-/*
-Copyright Google LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at https://angular.io/license
-*/

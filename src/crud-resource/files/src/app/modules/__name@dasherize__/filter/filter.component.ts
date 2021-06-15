@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: '<%= dasherize(name) %>-filter',
@@ -7,9 +7,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FilterComponent implements OnInit {
 
+  @Output() search = new EventEmitter();
+  @Output() clear = new EventEmitter();
+
+  id;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onSearch(){
+    this.search.emit(this.id)
+  }
+
+  onClear(){
+    this.id =''
+    this.clear.emit()
   }
 
 }

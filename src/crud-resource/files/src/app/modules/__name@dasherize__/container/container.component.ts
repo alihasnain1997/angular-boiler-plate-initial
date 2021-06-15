@@ -16,7 +16,7 @@ export class ContainerComponent implements OnInit {
 
 
   questions$: Observable<QuestionBase<any>[]>;
-
+  data = null
   validateForm!: FormGroup;
   tableData;
   isVisible = false;
@@ -29,40 +29,45 @@ export class ContainerComponent implements OnInit {
      }
 
   ngOnInit(): void {
-    this.<%= camelize(name) %>Service.findAll().subscribe(res => {
+
+    this.<%= camelize(name) %>Service.findAll();
+    this.<%= camelize(name) %>Service.<%= camelize(name) %>State$.subscribe(res => {
       this.tableData = res
-      this.initForm()
     })
   }
 
-  initForm() {
-    this.validateForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]]
-    });
-  }
 
-  ngOnDestroy() {
+  cancelForm() {
+    this.handleCancel()
   }
 
   showModal(): void {
     this.isVisible = true;
   }
 
-  handleOk(): void {
-
-    const data = this.validateForm.value
-    if (this.validateForm.valid) {
-      this.isOkLoading = true;
-      this.<%= camelize(name) %>Service.create(data).subscribe(res => {
-        console.log("Added data to server")
-        this.isVisible = false;
-        this.isOkLoading = false;
-      })
-    }
-  }
-
   handleCancel(): void {
     this.isVisible = false;
   }
+
+  add(data) {
+    this.<%= camelize(name) %>Service.create(data).subscribe(res => {
+      this.<%= camelize(name) %>Service.findAll();
+    },
+      err => {
+        console.log("error", err)
+      },
+      () => {
+        this.handleCancel()
+        // this.getBooks();
+      })
+  }
+  searchById(id) {
+    this.<%= camelize(name) %>Service.findOne(id);
+  }
+  
+  clearFilter() {
+    this.<%= camelize(name) %>Service.findAll();
+  }
+
 
 }

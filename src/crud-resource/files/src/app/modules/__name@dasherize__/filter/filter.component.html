@@ -1,8 +1,9 @@
 <div style="max-width: 500px; margin: 20px;">
   <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
-    <input type="text" nz-input placeholder="input search text" />
+    <input type="text" nz-input placeholder="input Id" [(ngModel)]="id" />
   </nz-input-group>
   <ng-template #suffixButton>
-    <button nz-button nzType="primary" nzSize="large" nzSearch>Search</button>
+    <button nz-button nzType="primary" nzSize="large" nzSearch (click)="onSearch()">Search</button>
+    <button nz-button nzType="primary" nzSize="large" nzSearch (click)="onClear()">Clear</button>
   </ng-template>
 </div>

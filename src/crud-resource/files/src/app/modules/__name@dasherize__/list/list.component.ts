@@ -1,64 +1,61 @@
 import { Component, Input ,OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { <%= classify(name) %>QuestionService } from '../<%= dasherize(name) %>-form.service';
+import { QuestionBase } from '../../../shared/model/question-base';
+import { Observable } from 'rxjs';
+import { <%= classify(name) %>Service } from '../<%= dasherize(name) %>-service';
 
 @Component({
   selector: '<%= dasherize(name) %>-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class ListComponent implements OnInit, OnDestroy {
+export class ListComponent implements OnInit {
 
-  validateForm!: FormGroup;
   @Input() listOfData: any;
-  
+  questions$: Observable<QuestionBase<any>[]>;
+
+  data;
+
 
 
   isVisible = false;
   isOkLoading = false;
-  // employeeSubscription: Subscription
-  // person = {
-  //   name: '',
-  //   key: '',
-  //   age: '',
-  //   address: ''
 
-  // }
-  // listOfData: Person[] = []
-  constructor(private fb: FormBuilder) { }
+  constructor(private <%= camelize(name) %>Service: <%= classify(name) %>Service,
+  service: <%= classify(name) %>QuestionService) {
+    this.questions$ = service.getQuestions();
+   }
 
   ngOnInit(): void {
-    this.initForm()
   }
 
-  initForm() {
-    this.validateForm = this.fb.group({
-      name: [null, [Validators.required]],
-    });
+  purge(data) {
+    this.<%= camelize(name) %>Service.delete(data.id).subscribe(res=>{
+      console.log(res)
+      this.<%= camelize(name) %>Service.findAll();
+    })
   }
-
-  ngOnDestroy() {
-    // this.employeeSubscription.unsubscribe();
-  }
-
-  deleteEmp(key: String) {
-    // this.employeeService.purgeEmployee(key)
-  }
+  
 
 
   showModal(data: any): void {
-    console.log(data)
+    this.data = data
     this.isVisible = true;
-    this.validateForm.patchValue({
-      name: data.name,
+  }
+
+  handleOk(data): void {
+    this.isOkLoading = true;
+    this.<%= camelize(name) %>Service.update(data).subscribe(res => {
+      console.log(res)
+      this.isVisible = false;
+      this.isOkLoading = false;
+      this.<%= camelize(name) %>Service.findAll();
     })
   }
 
-  handleOk(): void {
-    this.isOkLoading = true;
-    setTimeout(() => {
-      this.isVisible = false;
-      this.isOkLoading = false;
-    }, 1000);
+  cancelForm() {
+    this.handleCancel()
   }
 
   handleCancel(): void {
