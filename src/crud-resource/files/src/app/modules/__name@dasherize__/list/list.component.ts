@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { <%= classify(name) %>QuestionService } from '../<%= dasherize(name) %>-form.service';
 import { QuestionBase } from '../../../shared/model/question-base';
 import { Observable } from 'rxjs';
-import { <%= classify(name) %>Service } from '../<%= dasherize(name) %>-service';
+import { <%= classify(name) %>Service } from '../<%= dasherize(name) %>-component.service';
 
 @Component({
   selector: '<%= dasherize(name) %>-list',
