@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { <%= classify(name) %>Service } from '../<%= dasherize(name) %>-service';
+import { <%= classify(name) %>Service } from '../<%= dasherize(name) %>-component.service';
 import { <%= classify(name) %>QuestionService } from '../<%= dasherize(name) %>-form.service';
 import { QuestionBase } from '../../../shared/model/question-base';
 import { Observable } from 'rxjs';
+import io from 'socket.io-client'
+
 
 
 
@@ -21,11 +23,20 @@ export class ContainerComponent implements OnInit {
   tableData;
   isVisible = false;
   isOkLoading = false;
+  socket: any
+
 
   constructor(private fb: FormBuilder,
     private <%= camelize(name) %>Service: <%= classify(name) %>Service,
     service: <%= classify(name) %>QuestionService) {
       this.questions$ = service.getQuestions();
+
+      this.socket = io("http://127.0.0.1:3000", {
+        withCredentials: true,
+        extraHeaders: {
+          "my-custom-header": "abcd"
+        }
+      });
      }
 
   ngOnInit(): void {
@@ -33,6 +44,10 @@ export class ContainerComponent implements OnInit {
     this.<%= camelize(name) %>Service.findAll();
     this.<%= camelize(name) %>Service.<%= camelize(name) %>State$.subscribe(res => {
       this.tableData = res
+    })
+
+    this.socket.on('message', (message) => {
+      console.log(message)
     })
   }
 
@@ -68,6 +83,13 @@ export class ContainerComponent implements OnInit {
   clearFilter() {
     this.<%= camelize(name) %>Service.findAll();
   }
+
+  pingServer() {
+    this.socket.emit('ping', 'hello server', (callback) => {
+      console.log('message delivered')
+    })
+  }
+
 
 
 }
