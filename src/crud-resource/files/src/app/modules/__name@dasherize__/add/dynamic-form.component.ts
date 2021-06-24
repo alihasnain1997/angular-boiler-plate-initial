@@ -27,7 +27,7 @@ export class <%= classify(name) %>DynamicFormComponent implements OnInit {
   onSubmit() {
 
     const <%= dasherize(name) %> = { ...this.form.value }
-    this.data ? <%= dasherize(name) %> ['id'] = this.data.id : ''
+    this.data ? <%= dasherize(name) %> ['_id'] = this.data._id : ''
 
     if (this.form.valid) {
       this.saveForm.emit(<%= dasherize(name) %>)
