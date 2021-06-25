@@ -25,4 +25,17 @@ npm publish
 ```
 
 That's it!
- 
+ # Guide to use in project
+use "npm run build" to build the schematics
+after building go to the project you want to add schematics
+use  "/path npm link"
+path is the path to the schematics folder form your project folder
+use command "ng generate crud-resource:crud-resource" 
+enter the name for the module you want to create
+add routes in the app-routing module and authentication guard
+
+
+# Notes
+make sure to save your changes before adding schematics, some files may be overwritten by the schematics
+make sure your socket-io-client version matches with the server otherwise socket will not work
+
